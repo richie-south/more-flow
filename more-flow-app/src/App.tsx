@@ -32,6 +32,16 @@ type Blocks = {
 const App: React.FC = () => {
   const boardRef = useRef<HTMLDivElement>(null)
   const [blocks, setBlocks] = useState<Blocks>({
+    '0.3.2': {
+      type: 'standard-block',
+      data: [],
+      parrents: ['0.3'],
+      children: [],
+      x: 0,
+      y: 0,
+      height: 70,
+      width: 150,
+    },
     '0.3.1': {
       type: 'standard-block',
       data: [],
@@ -304,20 +314,44 @@ const App: React.FC = () => {
         const _childrenArray = Object.entries(_children)
         const largestXPosition = getLargestXPosition(_childrenArray)
 
+        const subTree = buildChild(
+          blocksArray,
+          childKey,
+          {
+            x: largestXPosition + (xOffset * 2),
+            y: parrentBlock.y + yOffset,
+            height: child.height,
+            width: child.width,
+            largestX: largestXPosition,
+            blockPath: [...blockPath, childKey]
+          }
+        )
+
+        const _subTreeArray = Object.entries(subTree)
+        if (_subTreeArray.length > 1) {
+          const smallestX = getSmallestXPosition(_subTreeArray)
+          if (smallestX < largestXPosition) {
+            return {
+              ..._children,
+              ...buildChild(
+                blocksArray,
+                childKey,
+                {
+                  x: largestXPosition + (largestXPosition - smallestX) + (xOffset * 4),
+                  y: parrentBlock.y + yOffset,
+                  height: child.height,
+                  width: child.width,
+                  largestX: largestXPosition + (largestXPosition - smallestX) + xOffset,
+                  blockPath: [...blockPath, childKey]
+                }
+              )
+            }
+          }
+        }
+
         return {
           ..._children,
-          ...buildChild(
-            blocksArray,
-            childKey,
-            {
-              x: largestXPosition + (xOffset * 2),
-              y: parrentBlock.y + yOffset,
-              height: child.height,
-              width: child.width,
-              largestX: largestXPosition,
-              blockPath: [...blockPath, childKey]
-            }
-          )
+          ...subTree
         }
       }, {} as Blocks)
 
@@ -375,10 +409,10 @@ const App: React.FC = () => {
       return
     }
 
-    console.log(boardRef.current?.childNodes)
+    /* console.log(boardRef.current?.childNodes) */
     const { height, width, x, y } = boardRef.current.getBoundingClientRect()
 
-    console.log('height, width, x, y', height, width, x, y)
+    /* console.log('height, width, x, y', height, width, x, y) */
 
     const blocksArray = Object.entries(blocks)
     const startBlocks = blocksArray.filter(
