@@ -142,9 +142,10 @@ export function buildBlock(
         largestXPosition,
         xOffset,
         yOffset,
-        parrentBlock.y + yOffset,
+        parrentBlock.y,
         child.height,
-        child.width
+        child.width,
+        parrentBlock.height
       )
 
       return {
@@ -172,6 +173,7 @@ function repositionBlocks(
   startBlockY: number,
   height: number,
   width: number,
+  startBlockHeight: number,
   ignoreLastHeight: boolean = false
 ): Blocks {
   const activeBlocksArray = Object.values(activeBlocks)
@@ -188,7 +190,7 @@ function repositionBlocks(
           largestXOfPreviousRootBlocks +
           (largestXOfPreviousRootBlocks - smallestX) +
           xOffset * 3,
-        y: ignoreLastHeight ? startBlockY : (startBlockY + height),
+        y: ignoreLastHeight ? startBlockY : startBlockY + startBlockHeight + yOffset,
         height: height,
         width: width,
         yOffset,
@@ -274,6 +276,7 @@ export function buildBlocks(
         startBlockY,
         startBlock.height,
         startBlock.width,
+        startBlock.height,
         true
       )
 
