@@ -120,7 +120,7 @@ export function buildBlock (
     const _childrenArray = Object.entries(_children)
     const largestXPosition = getLargestXPosition(_childrenArray)
 
-    const subTree = buildBlock(
+    const activeBlocks = buildBlock(
       blocks,
       blocksArray,
       childKey,
@@ -136,39 +136,22 @@ export function buildBlock (
       }
     )
 
-    const _subTreeArray = Object.entries(subTree)
-    if (_subTreeArray.length > 1) {
-      const smallestX = getSmallestXPosition(_subTreeArray)
-      /**
-       * reposition children
-       * if coliding
-       */
-      if (smallestX < largestXPosition) {
-        return {
-          ..._children,
-          ...buildBlock(
-            blocks,
-            blocksArray,
-            childKey,
-            {
-              // use larger offset when between two block trees
-              x: largestXPosition + (largestXPosition - smallestX) + (xOffset * 3),
-              y: parrentBlock.y + yOffset,
-              height: child.height,
-              width: child.width,
-              yOffset,
-              xOffset,
-              largestX: largestXPosition + (largestXPosition - smallestX) + xOffset,
-              blockPath: [...blockPath, childKey]
-            }
-          )
-        }
-      }
-    }
+    const repositionedBlocks = repositionBlocks(
+      blocks,
+      blocksArray,
+      childKey,
+      activeBlocks,
+      largestXPosition,
+      xOffset,
+      yOffset,
+      parrentBlock.y + yOffset,
+      child.height,
+      child.width
+    )
 
     return {
       ..._children,
-      ...subTree
+      ...repositionedBlocks
     }
   }, {} as Blocks)
 
@@ -182,39 +165,21 @@ function repositionBlocks (
   blocks: Blocks,
   blocksArray: Array<[string, Block]>,
   blockKey: string,
-  previousRootBlocks: Blocks,
+  activeBlocks: Blocks,
+  largestXOfPreviousRootBlocks: number,
   xOffset: number,
   yOffset: number,
   startBlockY: number,
   height: number,
   width: number
-
 ): Blocks {
-  const prevoiusRootBlocksArray = Object.entries(previousRootBlocks)
-  const largestXOfPreviousRootBlocks = getLargestXPosition(prevoiusRootBlocksArray)
-  console.log('largestXOfPreviousRootBlocks', largestXOfPreviousRootBlocks)
 
-  const subTree = buildBlock(
-    blocks,
-    blocksArray,
-    blockKey,
-    {
-      x: largestXOfPreviousRootBlocks + (xOffset),
-      y: yOffset,
-      height: height,
-      width: width,
-      yOffset,
-      xOffset,
-      largestX: largestXOfPreviousRootBlocks,
-    }
-  )
-
-  const _subTreeArray = Object.entries(subTree)
-  if (_subTreeArray.length > 1) {
-    const smallestX = getSmallestXPosition(_subTreeArray)
+  const activeBlocksArray = Object.entries(activeBlocks)
+  if (activeBlocksArray.length > 1) {
+    const smallestX = getSmallestXPosition(activeBlocksArray)
     /**
      * reposition children
-     * if coliding
+     * if colliding
      */
     if (smallestX < largestXOfPreviousRootBlocks) {
       return buildBlock(
@@ -235,7 +200,7 @@ function repositionBlocks (
     }
   }
 
-  return subTree
+  return activeBlocks
 }
 
 export function buildBlocks (
@@ -286,11 +251,30 @@ export function buildBlocks (
       }
     }
 
-     const rootBlocks = repositionBlocks(
+    const prevoiusRootBlocksArray = Object.entries(previousRootBlocks)
+    const largestXOfPreviousRootBlocks = getLargestXPosition(prevoiusRootBlocksArray)
+
+    const activeBlocks = buildBlock(
       blocks,
       blocksArray,
       startBlockKey,
-      previousRootBlocks,
+      {
+        x: largestXOfPreviousRootBlocks + (xOffset),
+        y: startBlockY,
+        height: startBlock.height,
+        width: startBlock.width,
+        yOffset,
+        xOffset,
+        largestX: largestXOfPreviousRootBlocks,
+      }
+    )
+
+    const repositionedBlocks = repositionBlocks(
+      blocks,
+      blocksArray,
+      startBlockKey,
+      activeBlocks,
+      largestXOfPreviousRootBlocks,
       xOffset,
       yOffset,
       startBlockY,
@@ -298,11 +282,11 @@ export function buildBlocks (
       startBlock.width
     )
 
-    previousRootBlocks = rootBlocks
+    previousRootBlocks = repositionedBlocks
 
     return {
       ..._blocks,
-      ...rootBlocks
+      ...repositionedBlocks
     }
   }, {})
 
