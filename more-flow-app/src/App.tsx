@@ -4,7 +4,7 @@ import { BlockList } from './components/block-list/block-list'
 import { StandardBlockContainer } from './components/blocks/standard-block'
 import styled from 'styled-components'
 import { Blocks, Block } from './lib/block-types'
-import { buildBlock } from './lib/build-child'
+import { buildBlock } from './lib/build-block'
 
 const BoardContainer = styled.div`
   position: absolute;
