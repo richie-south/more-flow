@@ -177,3 +177,109 @@ export function buildBlock (
     [parrentBlockKey]: parrentBlock
   }
 }
+
+function repositionBlocks () {
+
+}
+
+export function buildBlocks (
+  blocks: Blocks,
+  height: number,
+  width: number,
+  xOffset = 30,
+  yOffset = 150
+): Blocks {
+  const blocksArray = Object.entries(blocks)
+  const startBlocks = blocksArray.filter(
+    ([_, block]) => block.parrents.length === 0)
+
+  const startBlockX = width / 5
+  const startBlockY = height / 6
+  let previousRootBlocks: Blocks = {}
+  let previousRootBlockKey: string = ''
+  const _blocks = startBlocks.reduce((_blocks, [startBlockKey, startBlock], index) => {
+
+    if (previousRootBlockKey !== '') {
+      const prevoiusRootBlocksArray = Object.entries(previousRootBlocks)
+      const largestXOfPreviousRootBlocks = getLargestXPosition(prevoiusRootBlocksArray)
+      console.log('largestXOfPreviousRootBlocks', largestXOfPreviousRootBlocks)
+
+      const subTree = buildBlock(
+        blocks,
+        blocksArray,
+        startBlockKey,
+        {
+          x: largestXOfPreviousRootBlocks + (xOffset),
+          y: yOffset,
+          height: startBlock.height,
+          width: startBlock.width,
+          yOffset,
+          xOffset,
+          largestX: largestXOfPreviousRootBlocks,
+        }
+      )
+
+      const _subTreeArray = Object.entries(subTree)
+      if (_subTreeArray.length > 1) {
+        const smallestX = getSmallestXPosition(_subTreeArray)
+        /**
+         * reposition children
+         * if coliding
+         */
+        if (smallestX < largestXOfPreviousRootBlocks) {
+          return {
+            ..._blocks,
+            ...buildBlock(
+              blocks,
+              blocksArray,
+              startBlockKey,
+              {
+                // use larger offset when between two block trees
+                x: largestXOfPreviousRootBlocks + (largestXOfPreviousRootBlocks - smallestX) + (xOffset * 3),
+                y: startBlockY,
+                height: startBlock.height,
+                width: startBlock.width,
+                yOffset,
+                xOffset,
+                largestX: largestXOfPreviousRootBlocks + (largestXOfPreviousRootBlocks - smallestX) + xOffset,
+              }
+            )
+          }
+        }
+      }
+    }
+
+    const _startBlock = {
+      ...startBlock,
+      x: startBlockX,
+      y: startBlockY
+    } as Block
+
+    const rootBlocks = {
+      [startBlockKey]: _startBlock,
+      ...buildBlock(
+        blocks,
+        blocksArray,
+        startBlockKey,
+        {
+          x: startBlockX,
+          y: startBlockY,
+          height: startBlock.height,
+          width: startBlock.width,
+          xOffset,
+          yOffset,
+        }
+      )
+    }
+
+    previousRootBlocks = rootBlocks
+    previousRootBlockKey = startBlockKey
+
+    return {
+      ..._blocks,
+      ...rootBlocks
+    }
+  }, {})
+
+  return _blocks
+}
