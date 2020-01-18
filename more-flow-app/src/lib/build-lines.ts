@@ -200,6 +200,5 @@ export function buildLines(
     ]
   }, [] as Array<Line>)
 
-  console.log('lines', lines)
   return lines
 }
