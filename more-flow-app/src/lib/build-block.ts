@@ -212,7 +212,7 @@ export function buildBlocks(
     ([_, block]) => block.parrents.length === 0
   )
 
-  const startBlockX = width / 5
+  const startBlockX = width / 2
   const startBlockY = height / 6
   let previousRootBlocks: Blocks = {}
   const _blocks = startBlocks.reduce(
