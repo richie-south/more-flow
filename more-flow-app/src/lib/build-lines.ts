@@ -28,7 +28,7 @@ function buildLine(
     const [childBlockKey, childBlock] = children[0]
     const linePosition = `M${Math.ceil(
       parrentBlock.x + parrentBlock.width / 2
-    )},${parrentBlock.height} L${Math.ceil(
+    )},${0} L${Math.ceil(
       parrentBlock.x + parrentBlock.width / 2
     )},${yOffset - 5}`
 
@@ -54,7 +54,7 @@ function buildLine(
         linePosition,
         arrowPosition,
         x: Math.ceil(parrentBlock.x + parrentBlock.width / 2 - 10),
-        y: parrentBlock.y
+        y: parrentBlock.y + parrentBlock.height
       }
     ]
   }
@@ -64,9 +64,9 @@ function buildLine(
     if (childBlock.x < parrentBlock.x) {
       const linePosition = `M${Math.ceil(
         parrentBlock.x + parrentBlock.width / 2
-      )},${parrentBlock.height} L${Math.ceil(
+      )},${0} L${Math.ceil(
         parrentBlock.x + parrentBlock.width / 2
-      )},${Math.ceil(parrentBlock.height + yOffset / 4)} H${Math.ceil(
+      )},${Math.ceil(yOffset / 2)} H${Math.ceil(
         childBlock.x + childBlock.width / 2
       )}, L${Math.ceil(childBlock.x + childBlock.width / 2)},${Math.ceil(
         yOffset - 4
@@ -95,7 +95,7 @@ function buildLine(
           linePosition,
           arrowPosition,
           x: Math.ceil(childBlock.x + childBlock.width / 2 - 10),
-          y: parrentBlock.y
+          y: parrentBlock.y + parrentBlock.height
         }
       ]
     }
@@ -104,7 +104,7 @@ function buildLine(
     if (childBlock.x === parrentBlock.x) {
       const linePosition = `M${Math.ceil(
         parrentBlock.x + parrentBlock.width / 2
-      )},${parrentBlock.height} L${Math.ceil(
+      )},${0} L${Math.ceil(
         parrentBlock.x + parrentBlock.width / 2
       )},${yOffset - 5}`
 
@@ -131,7 +131,7 @@ function buildLine(
           linePosition,
           arrowPosition,
           x: Math.ceil(parrentBlock.x + parrentBlock.width / 2 - 10),
-          y: parrentBlock.y
+          y: parrentBlock.y + parrentBlock.height
         }
       ]
     }
@@ -141,10 +141,10 @@ function buildLine(
       childBlock.x + childBlock.width / 2
     )},${yOffset - 2} L${Math.ceil(
       childBlock.x + childBlock.width / 2
-    )},${Math.ceil(parrentBlock.height + yOffset / 4)} H${Math.ceil(
+    )},${Math.ceil(yOffset / 2)} H${Math.ceil(
       parrentBlock.x + parrentBlock.width / 2
     )}, L${Math.ceil(parrentBlock.x + parrentBlock.width / 2)},${
-      parrentBlock.height
+      0
     }`
 
     const arrowPosition = `M${Math.ceil(
@@ -170,7 +170,7 @@ function buildLine(
         linePosition,
         arrowPosition,
         x: Math.ceil(parrentBlock.x + parrentBlock.width / 2 + -4),
-        y: parrentBlock.y
+        y: parrentBlock.y + parrentBlock.height
       }
     ]
   }, [] as Array<Line>)
@@ -178,7 +178,7 @@ function buildLine(
 
 export function buildLines(
   blocks: Blocks,
-  yOffset: number = 150,
+  yOffset: number = 80,
   xOffset: number = 30
 ): Array<Line> {
   const blocksArray = Object.entries(blocks)

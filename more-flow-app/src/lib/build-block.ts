@@ -14,9 +14,10 @@ function buildFirstChildOfMany(
     parrentBlockX,
     parrentBlockY,
     parrentBlockWidth,
+    parrentBlockHeight,
     childHeight,
     childWidth,
-    yOffset = 150,
+    yOffset = 80,
     xOffset = 30,
     largestX = 0,
     blockPath = []
@@ -24,6 +25,7 @@ function buildFirstChildOfMany(
     parrentBlockX: number
     parrentBlockY: number
     parrentBlockWidth: number
+    parrentBlockHeight: number
     childHeight: number
     childWidth: number
     yOffset: number
@@ -40,7 +42,7 @@ function buildFirstChildOfMany(
   )
   return buildBlock(blocks, blocksArray, childKey, {
     x: xPosition,
-    y: parrentBlockY + yOffset,
+    y: (parrentBlockY + parrentBlockHeight) + yOffset,
     height: childHeight,
     width: childWidth,
     yOffset,
@@ -70,7 +72,7 @@ export function buildBlock(
     y,
     width,
     height,
-    yOffset = 150,
+    yOffset = 80,
     xOffset = 30,
     largestX = 0,
     blockPath = []
@@ -103,6 +105,7 @@ export function buildBlock(
             parrentBlockX: parrentBlock.x,
             parrentBlockY: parrentBlock.y,
             parrentBlockWidth: parrentBlock.width,
+            parrentBlockHeight: parrentBlock.height,
             childHeight: child.height,
             childWidth: child.width,
             blockPath,
@@ -122,7 +125,7 @@ export function buildBlock(
 
       const activeBlocks = buildBlock(blocks, blocksArray, childKey, {
         x: largestXPosition + xOffset,
-        y: parrentBlock.y + yOffset,
+        y: (parrentBlock.y + parrentBlock.height) + yOffset,
         height: child.height,
         width: child.width,
         yOffset,
@@ -168,7 +171,8 @@ function repositionBlocks(
   yOffset: number,
   startBlockY: number,
   height: number,
-  width: number
+  width: number,
+  ignoreLastHeight: boolean = false
 ): Blocks {
   const activeBlocksArray = Object.values(activeBlocks)
   if (activeBlocksArray.length > 1) {
@@ -184,7 +188,7 @@ function repositionBlocks(
           largestXOfPreviousRootBlocks +
           (largestXOfPreviousRootBlocks - smallestX) +
           xOffset * 3,
-        y: startBlockY,
+        y: ignoreLastHeight ? startBlockY : (startBlockY + height),
         height: height,
         width: width,
         yOffset,
@@ -205,7 +209,7 @@ export function buildBlocks(
   height: number,
   width: number,
   xOffset = 30,
-  yOffset = 150
+  yOffset = 80
 ): Blocks {
   const blocksArray = Object.entries(blocks)
   const startBlocks = blocksArray.filter(
@@ -269,7 +273,8 @@ export function buildBlocks(
         yOffset,
         startBlockY,
         startBlock.height,
-        startBlock.width
+        startBlock.width,
+        true
       )
 
       previousRootBlocks = repositionedBlocks
