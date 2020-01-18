@@ -8,6 +8,8 @@ import { buildBlock, buildBlocks } from './lib/build-block'
 import { EndArrow } from './components/paths/end-arrow'
 import { PathContainer } from './components/paths/path-container'
 import { Path } from './components/paths/path'
+import { buildLines, Line } from './lib/build-lines'
+import image from './tile.png'
 
 const BoardContainer = styled.div`
   position: absolute;
@@ -17,13 +19,17 @@ const BoardContainer = styled.div`
   padding: 0px;
   overflow: hidden;
   background-color: #FBFBFB;
+  background-image: url(${image});
+  background-repeat: repeat;
+  background-size: 30px 30px;
 `
 
 const App: React.FC = () => {
   const boardRef = useRef<HTMLDivElement>(null)
+  const [lines, setLines] = useState<Array<Line>>([])
   const [blocks, setBlocks] = useState<Blocks>({
 
-    /* 'root': {
+    /* '0': {
       type: 'standard-block',
       data: [],
       parrents: [],
@@ -35,7 +41,7 @@ const App: React.FC = () => {
     '2': {
       type: 'standard-block',
       data: [],
-      parrents: ['root'],
+      parrents: ['0'],
       x: 0,
       y: 0,
       height: 70,
@@ -44,7 +50,7 @@ const App: React.FC = () => {
     '3': {
       type: 'standard-block',
       data: [],
-      parrents: ['root'],
+      parrents: ['0'],
       x: 0,
       y: 0,
       height: 70,
@@ -53,22 +59,35 @@ const App: React.FC = () => {
     '4': {
       type: 'standard-block',
       data: [],
-      parrents: ['root'],
+      parrents: ['3'],
+      x: 0,
+      y: 0,
+      height: 70,
+      width: 150,
+    },
+    '5': {
+      type: 'standard-block',
+      data: [],
+      parrents: ['3'],
       x: 0,
       y: 0,
       height: 70,
       width: 150,
     },
 
-    '5': {
+    '6': {
       type: 'standard-block',
       data: [],
-      parrents: ['root'],
+      parrents: ['0'],
       x: 0,
       y: 0,
       height: 70,
       width: 150,
     }, */
+    /*
+
+
+     */
 
     '0.3.2': {
       type: 'standard-block',
@@ -137,7 +156,7 @@ const App: React.FC = () => {
     '0': {
       type: 'standard-block',
       data: [],
-      parrents: ['2'],
+      parrents: ['2.1'],
       x: 0,
       y: 0,
       height: 70,
@@ -153,14 +172,14 @@ const App: React.FC = () => {
       height: 70,
       width: 150,
     },
-    '1.2.2.1': {
+    '1.2.3': {
       type: 'standard-block',
       data: [],
-      parrents: ['1.2.2'],
+      parrents: ['1.2'],
       x: 0,
       y: 0,
       height: 70,
-      width: 150,
+      width: 250,
     },
     '1.2.2': {
       type: 'standard-block',
@@ -178,7 +197,7 @@ const App: React.FC = () => {
       x: 0,
       y: 0,
       height: 70,
-      width: 150,
+      width: 250,
     },
 
     '1.2': {
@@ -197,12 +216,31 @@ const App: React.FC = () => {
       x: 0,
       y: 0,
       height: 70,
-      width: 150,
+      width: 250,
     },
     '1': {
       type: 'standard-block',
       data: [],
       parrents: [],
+      x: 0,
+      y: 0,
+      height: 70,
+      width: 150,
+    },
+
+    '2.2': {
+      type: 'standard-block',
+      data: [],
+      parrents: ['2'],
+      x: 0,
+      y: 0,
+      height: 70,
+      width: 150,
+    },
+    '2.1': {
+      type: 'standard-block',
+      data: [],
+      parrents: ['2'],
       x: 0,
       y: 0,
       height: 70,
@@ -235,26 +273,47 @@ const App: React.FC = () => {
 
     const { height, width } = boardRef.current.getBoundingClientRect()
 
+    console.time('s')
     const _blocks = buildBlocks(
       blocks,
       height,
       width,
     )
+    console.timeEnd('s')
 
+    console.time('lines')
+    const _lines = buildLines(
+      _blocks,
+    )
+    console.timeEnd('lines')
+
+    setLines(_lines)
     setBlocks(_blocks)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const blocksArray = Object.entries(blocks)
-  console.log('blocksArray', blocksArray)
   return (
     <Fragment>
-      <PathContainer>
-        <Path d={"M512 0L512 40L5 40L5 80"} />
-      <EndArrow />
-    </PathContainer>
+      {/* <PathContainer>
+        <Path d={"M512,0 L512,40 L5,40 L5,80"} />
+        <EndArrow />
+      </PathContainer> */}
       <BoardContainer ref={boardRef} className='board'>
+        {lines.map((line) => {
+          return (
+            <PathContainer
+              key={line.id}
+              id={line.id}
+              x={line.x}
+              y={line.y}
+            >
+              <Path d={line.linePosition} />
+              <EndArrow d={line.arrowPosition} />
+            </PathContainer>
+          )
+        })}
         {blocksArray.map(([key, block]) => {
           return (
             <StandardBlockContainer
@@ -265,7 +324,7 @@ const App: React.FC = () => {
               top={block.y}
               left={block.x}
             >
-              key: {key}
+              {key}
             </StandardBlockContainer>
           )
         })}
