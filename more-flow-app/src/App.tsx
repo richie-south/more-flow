@@ -1,7 +1,7 @@
 import React, {useState, Fragment, useRef, useEffect} from 'react'
 import uuidv4 from 'uuid/v4'
 import { BlockList } from './components/block-list/block-list'
-import { StandardBlockContainer } from './components/blocks/standard-block'
+import { StandardBlockContainer, StandardBlock } from './components/blocks/standard-block'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Blocks, Block } from './lib/block-types'
 import { buildBlock, buildBlocks } from './lib/build-block'
@@ -13,7 +13,7 @@ import image from './tile.png'
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #FBFBFB;
+    background-color: #f5f5f5;
     background-image: url(${image});
     background-repeat: repeat;
     background-size: 30px 30px;
@@ -117,8 +117,8 @@ const App: React.FC = () => {
       parrents: ['0.3'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '0.3.1': {
       type: 'standard-block',
@@ -126,8 +126,8 @@ const App: React.FC = () => {
       parrents: ['0.3'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '0.3': {
       type: 'standard-block',
@@ -135,8 +135,8 @@ const App: React.FC = () => {
       parrents: ['0.1'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
 
     '0.2.2': {
@@ -145,8 +145,8 @@ const App: React.FC = () => {
       parrents: ['0.2'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '0.2.1': {
       type: 'standard-block',
@@ -154,7 +154,7 @@ const App: React.FC = () => {
       parrents: ['0.2'],
       x: 0,
       y: 0,
-      height: 70,
+      height: 120,
       width: 290,
     },
     '0.2': {
@@ -163,8 +163,8 @@ const App: React.FC = () => {
       parrents: ['0.1'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '0.1': {
       type: 'standard-block',
@@ -172,8 +172,8 @@ const App: React.FC = () => {
       parrents: ['0'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '0': {
       type: 'standard-block',
@@ -181,8 +181,8 @@ const App: React.FC = () => {
       parrents: ['2.1'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
 
     '1.2.2.2': {
@@ -191,8 +191,8 @@ const App: React.FC = () => {
       parrents: ['1.2.2'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '1.2.3': {
       type: 'standard-block',
@@ -200,8 +200,8 @@ const App: React.FC = () => {
       parrents: ['1.2'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '1.2.2': {
       type: 'standard-block',
@@ -209,8 +209,8 @@ const App: React.FC = () => {
       parrents: ['1.2'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '1.2.1': {
       type: 'standard-block',
@@ -218,7 +218,7 @@ const App: React.FC = () => {
       parrents: ['1.2'],
       x: 0,
       y: 0,
-      height: 70,
+      height: 120,
       width: 250,
     },
 
@@ -228,8 +228,8 @@ const App: React.FC = () => {
       parrents: ['1.1'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '1.1': {
       type: 'standard-block',
@@ -237,7 +237,7 @@ const App: React.FC = () => {
       parrents: ['1'],
       x: 0,
       y: 0,
-      height: 70,
+      height: 120,
       width: 250,
     },
     '1': {
@@ -246,8 +246,8 @@ const App: React.FC = () => {
       parrents: [],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
 
     '2.2': {
@@ -256,8 +256,8 @@ const App: React.FC = () => {
       parrents: ['2'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '2.1': {
       type: 'standard-block',
@@ -265,8 +265,8 @@ const App: React.FC = () => {
       parrents: ['2'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '2': {
       type: 'standard-block',
@@ -274,8 +274,8 @@ const App: React.FC = () => {
       parrents: ['3'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '3': {
       type: 'standard-block',
@@ -283,8 +283,8 @@ const App: React.FC = () => {
       parrents: [],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
   })
 
@@ -354,16 +354,17 @@ const App: React.FC = () => {
         })}
         {blocksArray.map(([key, block]) => {
           return (
-            <StandardBlockContainer
+            <StandardBlock
               key={key}
-              id={key}
               widthProp={block.width}
               heightProp={block.height}
               top={block.y}
               left={block.x}
+              blockKey={key}
+              block={block}
             >
               {key}
-            </StandardBlockContainer>
+            </StandardBlock>
           )
         })}
       </BoardContainer>
