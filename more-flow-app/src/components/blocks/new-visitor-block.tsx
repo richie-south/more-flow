@@ -4,7 +4,8 @@ import {
   StandardBlockProps,
   TitleContainer,
   Title,
-  IconContainer
+  IconContainer,
+  TitleCenterContainer
 } from './standard-block'
 import eyeBlue from '../../assets/eye-blue.svg'
 
@@ -25,15 +26,14 @@ export const NewVisitorBlock: React.FC<StandardBlockProps> = ({
       top={top}
       left={left}
     >
-      <TitleContainer>
+      <TitleCenterContainer>
         <IconContainer>
           <img src={eyeBlue} alt={'eye blue'} />
         </IconContainer>
         <Title>
           New visitor
         </Title>
-
-      </TitleContainer>
+      </TitleCenterContainer>
     </StandardBlockContainer>
   )
 }

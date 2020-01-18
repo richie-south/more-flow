@@ -44,7 +44,6 @@ export const IconContainer = styled.div`
 `
 
 export const Title = styled.div`
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -53,6 +52,25 @@ export const Title = styled.div`
   vertical-align: middle;
   margin-left: 8px;
   font-size: 16px;
+`
+
+export const TitleCenterContainer = styled.div`
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+`
+
+export const Content = styled.div`
+  padding-top: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
+`
+
+export const Text = styled.div`
+  font-size: 14px;
+  color: #808292;
 `
 
 export type StandardBlockProps = {
