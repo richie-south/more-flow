@@ -1,7 +1,7 @@
 import { Blocks, Block } from "./block-types"
-import { getLargestXPosition, getSmallestXPosition } from "./get-positions"
+import { getLargestXPosition, getSmallestXPosition, getCenterBlocksPosition } from "./get-positions"
 
-function buildSingelChild (
+function buildSingleBlock (
   blocks: Blocks,
   blocksArray: Array<[string, Block]>,
   parrentBlockKey: string,
@@ -9,14 +9,16 @@ function buildSingelChild (
   parrentBlock: Block,
   {
     yOffset = 150,
+    xOffset = 30,
     largestX = 0,
     blockPath = []
   }: {
     yOffset: number
+    xOffset: number
     largestX: number
     blockPath: Array<string>
   }
-) {
+): Blocks {
   const [childKey, childBlock] = child
   const positionedChild = {
     ...childBlock,
@@ -26,7 +28,7 @@ function buildSingelChild (
 
   if (childBlock.parrents.length > 0) {
     return {
-      ...buildChild(
+      ...buildBlock(
         blocks,
         blocksArray,
         childKey,
@@ -36,6 +38,8 @@ function buildSingelChild (
           height: positionedChild.height,
           width: positionedChild.width,
           largestX,
+          xOffset,
+          yOffset,
           blockPath: [...blockPath, childKey]
         }
       ),
@@ -50,6 +54,56 @@ function buildSingelChild (
   }
 }
 
+function buildFirstChildOfMany (
+  blocks: Blocks,
+  blocksArray: Array<[string, Block]>,
+  children: Array<[string, Block]>,
+  childKey: string,
+  {
+    parrentBlockX,
+    parrentBlockY,
+    parrentBlockWidth,
+    childHeight,
+    childWidth,
+    yOffset = 150,
+    xOffset = 30,
+    largestX = 0,
+    blockPath = []
+  }: {
+    parrentBlockX: number
+    parrentBlockY: number
+    parrentBlockWidth: number
+    childHeight: number
+    childWidth: number
+    yOffset: number
+    xOffset: number
+    largestX: number
+    blockPath: Array<string>
+  }
+) {
+  const xPosition = getCenterBlocksPosition(
+    children,
+    xOffset,
+    parrentBlockX,
+    parrentBlockWidth
+  )
+  return buildBlock(
+    blocks,
+    blocksArray,
+    childKey,
+    {
+      x: xPosition,
+      y: parrentBlockY + yOffset,
+      height: childHeight,
+      width: childWidth,
+      yOffset,
+      xOffset,
+      largestX,
+      blockPath: [...blockPath, childKey]
+    }
+  )
+}
+
 type BuildChildMeta = {
   x: number
   y: number
@@ -61,7 +115,7 @@ type BuildChildMeta = {
   blockPath?: Array<string>
 }
 
-export function buildChild (
+export function buildBlock (
     blocks: Blocks,
     blocksArray: Array<[string, Block]>,
     parrentBlockKey: string,
@@ -94,36 +148,43 @@ export function buildChild (
     if (children.length > 1) {
       const positionedChildren = children.reduce((_children, [childKey, child], index) => {
         if (index === 0) {
+          const firstChildTree = buildFirstChildOfMany(
+            blocks,
+            blocksArray,
+            children,
+            childKey,
+            {
+              parrentBlockX: parrentBlock.x,
+              parrentBlockY: parrentBlock.y,
+              parrentBlockWidth: parrentBlock.width,
+              childHeight: child.height,
+              childWidth: child.width,
+              blockPath,
+              largestX,
+              xOffset,
+              yOffset
+            }
+          )
           return {
             ..._children,
-            ...buildChild(
-              blocks,
-              blocksArray,
-              childKey,
-              {
-                x: ((parrentBlock.x - parrentBlock.width / 2) - xOffset),
-                y: parrentBlock.y + yOffset,
-                height: child.height,
-                width: child.width,
-                largestX,
-                blockPath: [...blockPath, childKey]
-              }
-            )
+            ...firstChildTree
           }
         }
 
         const _childrenArray = Object.entries(_children)
         const largestXPosition = getLargestXPosition(_childrenArray)
 
-        const subTree = buildChild(
+        const subTree = buildBlock(
           blocks,
           blocksArray,
           childKey,
           {
-            x: largestXPosition + (xOffset * 2),
+            x: largestXPosition + (xOffset),
             y: parrentBlock.y + yOffset,
             height: child.height,
             width: child.width,
+            yOffset,
+            xOffset,
             largestX: largestXPosition,
             blockPath: [...blockPath, childKey]
           }
@@ -139,15 +200,18 @@ export function buildChild (
           if (smallestX < largestXPosition) {
             return {
               ..._children,
-              ...buildChild(
+              ...buildBlock(
                 blocks,
                 blocksArray,
                 childKey,
                 {
-                  x: largestXPosition + (largestXPosition - smallestX) + (xOffset * 4),
+                  // use larger offset when between two block trees
+                  x: largestXPosition + (largestXPosition - smallestX) + (xOffset * 3),
                   y: parrentBlock.y + yOffset,
                   height: child.height,
                   width: child.width,
+                  yOffset,
+                  xOffset,
                   largestX: largestXPosition + (largestXPosition - smallestX) + xOffset,
                   blockPath: [...blockPath, childKey]
                 }
@@ -172,7 +236,7 @@ export function buildChild (
      * single child should be directly under
      */
     if (children.length === 1) {
-      return buildSingelChild(
+      return buildSingleBlock(
         blocks,
         blocksArray,
         parrentBlockKey,
@@ -180,6 +244,7 @@ export function buildChild (
         parrentBlock,
         {
           yOffset,
+          xOffset,
           largestX,
           blockPath
         }

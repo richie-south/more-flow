@@ -4,7 +4,7 @@ import { BlockList } from './components/block-list/block-list'
 import { StandardBlockContainer } from './components/blocks/standard-block'
 import styled from 'styled-components'
 import { Blocks, Block } from './lib/block-types'
-import { buildChild } from './lib/build-child'
+import { buildBlock } from './lib/build-child'
 
 const BoardContainer = styled.div`
   position: absolute;
@@ -20,7 +20,7 @@ const App: React.FC = () => {
   const boardRef = useRef<HTMLDivElement>(null)
   const [blocks, setBlocks] = useState<Blocks>({
 
-    'root': {
+    /* 'root': {
       type: 'standard-block',
       data: [],
       parrents: [],
@@ -57,7 +57,17 @@ const App: React.FC = () => {
       width: 150,
     },
 
-    /* '0.3.2': {
+    '5': {
+      type: 'standard-block',
+      data: [],
+      parrents: ['root'],
+      x: 0,
+      y: 0,
+      height: 70,
+      width: 150,
+    }, */
+
+    '0.3.2': {
       type: 'standard-block',
       data: [],
       parrents: ['0.3'],
@@ -212,7 +222,7 @@ const App: React.FC = () => {
       y: 0,
       height: 70,
       width: 150,
-    }, */
+    },
   })
 
   useEffect(() => {
@@ -242,7 +252,7 @@ const App: React.FC = () => {
       return {
         ..._blocks,
         [startBlockKey]: _startBlock,
-        ...buildChild(
+        ...buildBlock(
           blocks,
           blocksArray,
           startBlockKey,
@@ -251,6 +261,7 @@ const App: React.FC = () => {
             y: startBlockY,
             height: startBlock.height,
             width: startBlock.width,
+            /* xOffset: 100 */
           }
         )
       }
