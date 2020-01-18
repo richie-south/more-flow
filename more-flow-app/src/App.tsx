@@ -9,10 +9,13 @@ import { EndArrow } from './components/paths/end-arrow'
 import { PathContainer } from './components/paths/path-container'
 import { Path } from './components/paths/path'
 import { buildLines, Line } from './lib/build-lines'
-import image from './tile.png'
+import image from './assets/tile.png'
+import { NewVisitorBlock } from './components/blocks/new-visitor-block'
+import { MatchBlock } from './components/blocks/match-block'
 
 const GlobalStyle = createGlobalStyle`
   body {
+    font-family: 'Roboto', sans-serif;
     background-color: #f5f5f5;
     background-image: url(${image});
     background-repeat: repeat;
@@ -51,67 +54,70 @@ const App: React.FC = () => {
   const [lines, setLines] = useState<Array<Line>>([])
   const [blocks, setBlocks] = useState<Blocks>({
 
-    /* '0': {
-      type: 'standard-block',
-      data: [],
+    '0': {
+      type: 'new-visitor-block',
+      typeMeta: {},
+      data: {},
       parrents: [],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '2': {
-      type: 'standard-block',
-      data: [],
+      type: 'match-block',
+      typeMeta: {},
+      data: {},
       parrents: ['0'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '3': {
-      type: 'standard-block',
-      data: [],
+      type: 'match-block',
+      typeMeta: {},
+      data: {},
       parrents: ['0'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '4': {
       type: 'standard-block',
-      data: [],
+      typeMeta: {},
+      data: {},
       parrents: ['3'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
     '5': {
       type: 'standard-block',
-      data: [],
+      typeMeta: {},
+      data: {},
       parrents: ['3'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
+      height: 120,
+      width: 320,
     },
 
     '6': {
-      type: 'standard-block',
-      data: [],
+      type: 'match-block',
+      typeMeta: {},
+      data: {},
       parrents: ['0'],
       x: 0,
       y: 0,
-      height: 70,
-      width: 150,
-    }, */
-    /*
+      height: 120,
+      width: 320,
+    },
 
 
-     */
-
-    '0.3.2': {
+    /* '0.3.2': {
       type: 'standard-block',
       data: [],
       parrents: ['0.3'],
@@ -285,7 +291,7 @@ const App: React.FC = () => {
       y: 0,
       height: 120,
       width: 320,
-    },
+    }, */
   })
 
   useEffect(() => {
@@ -353,6 +359,36 @@ const App: React.FC = () => {
           )
         })}
         {blocksArray.map(([key, block]) => {
+          if (block.type === 'new-visitor-block') {
+            return (
+              <NewVisitorBlock
+                key={key}
+                widthProp={block.width}
+                heightProp={block.height}
+                top={block.y}
+                left={block.x}
+                blockKey={key}
+                block={block}
+              >
+              </NewVisitorBlock>
+            )
+          }
+          if (block.type === 'match-block') {
+            return (
+              <MatchBlock
+                key={key}
+                widthProp={block.width}
+                heightProp={block.height}
+                top={block.y}
+                left={block.x}
+                blockKey={key}
+                block={block}
+              >
+
+              </MatchBlock>
+            )
+          }
+
           return (
             <StandardBlock
               key={key}

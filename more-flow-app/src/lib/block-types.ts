@@ -1,6 +1,7 @@
 export type Block = {
   type: string,
-  data: Array<object>
+  data: object
+  typeMeta: object
   parrents: Array<string>
   x: number
   y: number
