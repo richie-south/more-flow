@@ -46,7 +46,7 @@ function buildFirstChildOfMany(
     yOffset,
     xOffset,
     largestX,
-    blockPath: [...blockPath, childKey]
+    blockPath: blockPath.concat(childKey)
   })
 }
 
@@ -117,7 +117,7 @@ export function buildBlock(
         }
       }
 
-      const _childrenArray = Object.entries(_children)
+      const _childrenArray = Object.values(_children)
       const largestXPosition = getLargestXPosition(_childrenArray)
 
       const activeBlocks = buildBlock(blocks, blocksArray, childKey, {
@@ -128,7 +128,7 @@ export function buildBlock(
         yOffset,
         xOffset,
         largestX: largestXPosition,
-        blockPath: [...blockPath, childKey]
+        blockPath: blockPath.concat(childKey)
       })
 
       const repositionedBlocks = repositionBlocks(
@@ -170,7 +170,7 @@ function repositionBlocks(
   height: number,
   width: number
 ): Blocks {
-  const activeBlocksArray = Object.entries(activeBlocks)
+  const activeBlocksArray = Object.values(activeBlocks)
   if (activeBlocksArray.length > 1) {
     const smallestX = getSmallestXPosition(activeBlocksArray)
     /**
@@ -244,7 +244,7 @@ export function buildBlocks(
         }
       }
 
-      const prevoiusRootBlocksArray = Object.entries(previousRootBlocks)
+      const prevoiusRootBlocksArray = Object.values(previousRootBlocks)
       const largestXOfPreviousRootBlocks = getLargestXPosition(
         prevoiusRootBlocksArray
       )

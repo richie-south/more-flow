@@ -1,7 +1,7 @@
 import { Block } from "./block-types"
 
-export function getLargestXPosition (blocks: Array<[string, Block]>) {
-  return blocks.reduce((left, [_, block]) => {
+export function getLargestXPosition (blocks: Array<Block>) {
+  return blocks.reduce((left, block) => {
     const rightEdge = block.x + block.width
 
     return rightEdge > left
@@ -10,12 +10,12 @@ export function getLargestXPosition (blocks: Array<[string, Block]>) {
   }, 0)
 }
 
-export function getSmallestXPosition (blocks: Array<[string, Block]>) {
-  return blocks.reduce((left, [_, block]) =>
+export function getSmallestXPosition (blocks: Array<Block>) {
+  return blocks.reduce((left, block) =>
      block.x < left
       ? block.x
       : left
-  , blocks[0][1].x)
+  , blocks[0].x)
 }
 
 export function getCenterBlocksPosition (
