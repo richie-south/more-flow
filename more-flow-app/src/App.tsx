@@ -4,7 +4,10 @@ import { BlockList } from './components/block-list/block-list'
 import { StandardBlockContainer } from './components/blocks/standard-block'
 import styled from 'styled-components'
 import { Blocks, Block } from './lib/block-types'
-import { buildBlock } from './lib/build-block'
+import { buildBlock, buildBlocks } from './lib/build-block'
+import { EndArrow } from './components/paths/end-arrow'
+import { PathContainer } from './components/paths/path-container'
+import { Path } from './components/paths/path'
 
 const BoardContainer = styled.div`
   position: absolute;
@@ -199,7 +202,7 @@ const App: React.FC = () => {
     '1': {
       type: 'standard-block',
       data: [],
-      parrents: ['2'],
+      parrents: [],
       x: 0,
       y: 0,
       height: 70,
@@ -230,43 +233,13 @@ const App: React.FC = () => {
       return
     }
 
-    /* console.log(boardRef.current?.childNodes) */
-    const { height, width, x, y } = boardRef.current.getBoundingClientRect()
+    const { height, width } = boardRef.current.getBoundingClientRect()
 
-    /* console.log('height, width, x, y', height, width, x, y) */
-
-    const blocksArray = Object.entries(blocks)
-    const startBlocks = blocksArray.filter(
-      ([_, block]) => block.parrents.length === 0)
-
-    const _blocks = startBlocks.reduce((_blocks, [startBlockKey, startBlock], index) => {
-      const startBlockX = width / 5
-      const startBlockY = height / 6
-
-      const _startBlock = {
-        ...startBlock,
-        x: startBlockX,
-        y: startBlockY
-      } as Block
-
-      return {
-        ..._blocks,
-        [startBlockKey]: _startBlock,
-        ...buildBlock(
-          blocks,
-          blocksArray,
-          startBlockKey,
-          {
-            x: startBlockX,
-            y: startBlockY,
-            height: startBlock.height,
-            width: startBlock.width,
-            /* xOffset: 100 */
-          }
-        )
-      }
-
-    }, {})
+    const _blocks = buildBlocks(
+      blocks,
+      height,
+      width,
+    )
 
     setBlocks(_blocks)
 
@@ -277,12 +250,16 @@ const App: React.FC = () => {
   console.log('blocksArray', blocksArray)
   return (
     <Fragment>
+      <PathContainer>
+        <Path d={"M512 0L512 40L5 40L5 80"} />
+      <EndArrow />
+    </PathContainer>
       <BoardContainer ref={boardRef} className='board'>
         {blocksArray.map(([key, block]) => {
           return (
             <StandardBlockContainer
               key={key}
-              data-id={key}
+              id={key}
               widthProp={block.width}
               heightProp={block.height}
               top={block.y}
@@ -293,6 +270,7 @@ const App: React.FC = () => {
           )
         })}
       </BoardContainer>
+
     </Fragment>
   )
 }
