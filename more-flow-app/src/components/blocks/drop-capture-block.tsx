@@ -1,15 +1,4 @@
 import React, { useState, useRef } from 'react'
-import {
-  StandardBlockContainer,
-  StandardBlockProps,
-  TitleContainer,
-  Title,
-  IconContainer,
-  Content,
-  Text,
-  CaptureIndicator
-} from './standard-block'
-import actionBlue from '../../assets/action-blue.svg'
 import styled from 'styled-components'
 
 const Transparent = styled.div<{
@@ -20,12 +9,11 @@ const Transparent = styled.div<{
 }>`
   position: absolute;
   width: ${(props) => props.widthProp + 40}px;
-  height: ${(props) => props.heightProp + 40}px;
-  top: ${(props) => props.top - 20}px;
+  height: ${(props) => props.heightProp}px;
+  top: ${(props) => props.top - 10}px;
   left: ${(props) => props.left - 20}px;
   z-index: 4;
 `
-
 
 type DropCaptureBlockProps = {
   widthProp: number
@@ -33,6 +21,7 @@ type DropCaptureBlockProps = {
   top: number
   left: number
   onDrop: (blockType: string) => void
+  yOffset: number
 }
 
 export const DropCaptureBlock: React.FC<DropCaptureBlockProps> = ({
@@ -41,7 +30,8 @@ export const DropCaptureBlock: React.FC<DropCaptureBlockProps> = ({
   top,
   left,
   children,
-  onDrop
+  onDrop,
+  yOffset
 }) => {
   const [canCapture, setCanCapture] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -50,7 +40,7 @@ export const DropCaptureBlock: React.FC<DropCaptureBlockProps> = ({
   return (
     <Transparent
       widthProp={widthProp}
-      heightProp={heightProp}
+      heightProp={heightProp + yOffset - 30}
       top={top}
       left={left}
       ref={containerRef}
