@@ -60,6 +60,8 @@ const BoardContainer = styled.div<BoardContainerProps>`
 `
 
 const App: React.FC = () => {
+  const xOffset = 30
+  const yOffset = 80
   const boardRef = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<{ height: number, width: number}>({
     height: 0,
@@ -93,12 +95,16 @@ const App: React.FC = () => {
       blocks,
       startBlockX,
       startBlockY,
+      xOffset,
+      yOffset,
     )
     console.timeEnd('blocks')
 
     console.time('lines')
     const _lines = buildLines(
-      _blocks
+      _blocks,
+      xOffset,
+      yOffset,
     )
     console.timeEnd('lines')
 
@@ -189,6 +195,7 @@ const App: React.FC = () => {
           id={'board'}
           rectWidth={rect.width}
         >
+
           {lines.map((line) => {
             const active = blockPaths.includes(line.id)
             return (
@@ -223,6 +230,7 @@ const App: React.FC = () => {
                   block={block}
                   handleDrag={handleDrag}
                   onAddNewBlock={handleCreateAndAddNewBlock}
+                  yOffset={yOffset}
                 >
                 </NewVisitorBlock>
               )
@@ -238,6 +246,7 @@ const App: React.FC = () => {
                   blockKey={key}
                   block={block}
                   onAddNewBlock={handleCreateAndAddNewBlock}
+                  yOffset={yOffset}
                 >
                 </MatchBlock>
               )
@@ -253,6 +262,7 @@ const App: React.FC = () => {
                 blockKey={key}
                 block={block}
                 onAddNewBlock={handleCreateAndAddNewBlock}
+                yOffset={yOffset}
               >
                 {key}
               </StandardBlock>
