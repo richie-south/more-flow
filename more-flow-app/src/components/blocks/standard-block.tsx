@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Block } from '../../lib/block-types'
 import { DropCaptureBlock } from './drop-capture-block'
+import databaseOrange from '../../assets/database-orange.svg'
 
 type StandardBlockContainer = {
   widthProp: number
@@ -54,6 +55,7 @@ export const Title = styled.div`
   vertical-align: middle;
   margin-left: 8px;
   font-size: 16px;
+  text-transform: capitalize;
 `
 
 export const TitleCenterContainer = styled.div`
@@ -118,11 +120,10 @@ export const CaptureIndicator = () => {
   )
 }
 
-
-
 export type StandardBlockProps = {
   block: Block
   blockKey: string
+  yOffset: number
   onAddNewBlock: (blockKey: string, newBlockType: string) => void
 } & StandardBlockContainer
 
@@ -135,6 +136,7 @@ export const StandardBlock: React.FC<StandardBlockProps> = ({
   blockKey,
   children,
   onAddNewBlock,
+  yOffset,
 }) => {
 
   return (
@@ -143,18 +145,19 @@ export const StandardBlock: React.FC<StandardBlockProps> = ({
       heightProp={heightProp}
       top={top}
       left={left}
+      yOffset={yOffset}
       onDrop={(blockType) => onAddNewBlock(blockKey, blockType)}
     >
       {(canCapture: boolean) => (
         <StandardBlockContainer
           widthProp={widthProp}
           heightProp={heightProp}
-          top={20}
+          top={10}
           left={20}
         >
           <TitleContainer>
             <IconContainer>
-
+              <img src={databaseOrange} alt={'eye blue'} />
             </IconContainer>
             <Title>
               {children}

@@ -23,7 +23,8 @@ export const NewVisitorBlock: React.FC<StandardBlockProps & NewVisitorBlockProps
   blockKey,
   children,
   handleDrag,
-  onAddNewBlock
+  onAddNewBlock,
+  yOffset
 }) => {
   const lastPositions = useRef({
     x: 0,
@@ -36,13 +37,14 @@ export const NewVisitorBlock: React.FC<StandardBlockProps & NewVisitorBlockProps
       heightProp={heightProp}
       top={top}
       left={left}
+      yOffset={yOffset}
       onDrop={(blockType) => onAddNewBlock(blockKey, blockType)}
     >
       {(canCapture: boolean) => (
         <StandardBlockContainer
           widthProp={widthProp}
           heightProp={heightProp}
-          top={20}
+          top={10}
           left={20}
           draggable
           onDragCapture={(event) => {
