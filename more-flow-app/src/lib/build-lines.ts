@@ -183,8 +183,8 @@ function buildLine(
 
 export function buildLines(
   blocks: Blocks,
+  xOffset: number = 30,
   yOffset: number = 80,
-  xOffset: number = 30
 ): Array<Line> {
   const blocksArray = Object.entries(blocks)
   const startBlocks = blocksArray.filter(
