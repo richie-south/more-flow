@@ -13,7 +13,7 @@ const Svg = styled.svg<SvgProps>`
   ${(props) => props.active ? `
     z-index: ${1};
   ` : ``}
-  width: ${(props) => props.rectWidth}px;
+  width: ${(props) => props.rectWidth + 400}px;
   left: 0px;
   top: ${(props) => props.top}px;
 `
