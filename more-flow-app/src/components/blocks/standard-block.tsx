@@ -27,6 +27,7 @@ export const StandardBlockContainer = styled.div<StandardBlockContainer>`
   border-radius: 5px;
   background-color: #FFF;
   box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.05);
+  user-select: none;
 `
 
 export const TitleContainer = styled.div`
