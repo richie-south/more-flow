@@ -1,6 +1,7 @@
 import {Blocks, Block} from './block-types'
 
 export type Line = {
+  direction: string
   id: string
   linePosition: string
   arrowPosition: string
@@ -50,7 +51,8 @@ function buildLine(
         xOffset
       ),
       {
-        id: `down-${childBlockKey}`,
+        direction: 'down',
+        id: childBlockKey,
         linePosition,
         arrowPosition,
         x: Math.ceil(parrentBlock.x + parrentBlock.width / 2 - 10),
@@ -91,7 +93,8 @@ function buildLine(
           xOffset
         ),
         {
-          id: `left-${childBlockKey}`,
+          direction: `left`,
+          id: childBlockKey,
           linePosition,
           arrowPosition,
           x: Math.ceil(childBlock.x + childBlock.width / 2 - 10),
@@ -127,7 +130,8 @@ function buildLine(
           xOffset
         ),
         {
-          id: `down-${childBlock.x + parrentBlock.x + childBlock.width}`,
+          direction: `down`,
+          id: childBlockKey,
           linePosition,
           arrowPosition,
           x: Math.ceil(parrentBlock.x + parrentBlock.width / 2 - 10),
@@ -166,7 +170,8 @@ function buildLine(
         xOffset
       ),
       {
-        id: `right-${childBlockKey}`,
+        direction: `right`,
+        id: childBlockKey,
         linePosition,
         arrowPosition,
         x: Math.ceil(parrentBlock.x + parrentBlock.width / 2 + -4),
