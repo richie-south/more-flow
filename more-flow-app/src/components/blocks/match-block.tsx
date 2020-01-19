@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import {
   StandardBlockContainer,
   StandardBlockProps,
@@ -6,10 +6,12 @@ import {
   Title,
   IconContainer,
   Content,
-  Text
+  Text,
+  CaptureIndicator
 } from './standard-block'
 import actionBlue from '../../assets/action-blue.svg'
 import styled from 'styled-components'
+import { DropCaptureBlock } from './drop-capture-block'
 
 const MatchPath = styled.span`
   padding-left: 8px;
@@ -18,7 +20,6 @@ const MatchPath = styled.span`
   color: black;
 `
 
-
 export const MatchBlock: React.FC<StandardBlockProps> = ({
   widthProp,
   heightProp,
@@ -26,33 +27,47 @@ export const MatchBlock: React.FC<StandardBlockProps> = ({
   left,
   block,
   blockKey,
-  children,
+  onAddNewBlock,
 }) => {
 
   return (
-    <StandardBlockContainer
+    <DropCaptureBlock
       widthProp={widthProp}
       heightProp={heightProp}
       top={top}
       left={left}
+      onDrop={(blockType) => onAddNewBlock(blockKey, blockType)}
     >
-      <TitleContainer>
-        <IconContainer>
-          <img src={actionBlue} alt={'eye blue'} />
-        </IconContainer>
-        <Title>
-          Matches
-        </Title>
-      </TitleContainer>
-      <Content>
-        <Text>
-          When
-          <MatchPath>
-            {block.typeMeta.match}
-          </MatchPath>
-          matches
-        </Text>
-      </Content>
-    </StandardBlockContainer>
+      {(canCapture: boolean) => (
+        <StandardBlockContainer
+          widthProp={widthProp}
+          heightProp={heightProp}
+          top={20}
+          left={20}
+        >
+          <TitleContainer>
+            <IconContainer>
+              <img src={actionBlue} alt={'eye blue'} />
+            </IconContainer>
+            <Title>
+              Matches
+            </Title>
+          </TitleContainer>
+          <Content>
+            <Text>
+              When
+              <MatchPath>
+                {block.typeMeta.match}
+              </MatchPath>
+              matches
+            </Text>
+          </Content>
+          {canCapture && (
+            <CaptureIndicator />
+          )}
+        </StandardBlockContainer>
+      )}
+
+    </DropCaptureBlock>
   )
 }

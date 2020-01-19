@@ -12,6 +12,8 @@ import { NewVisitorBlock } from './components/blocks/new-visitor-block'
 import { MatchBlock } from './components/blocks/match-block'
 import { debounce } from 'lodash'
 import { startBlocks } from './start-blocks'
+import { BlockList } from './components/block-list/block-list'
+import uuidv4 from 'uuid/v4'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -138,10 +140,50 @@ const App: React.FC = () => {
     setBlocks(_blocks)
   }, 0)).current
 
+  const handleCreateAndAddNewBlock = (blockKey: string, blockType: string) => {
+    console.log(blockKey, blockType)
+    if (!boardRef.current) {
+      return
+    }
+
+    const { height, width } = boardRef.current.getBoundingClientRect()
+    const startBlockX = width / 2
+    const startBlockY = height / 6
+
+    const _blocks = buildBlocks(
+      {
+        ...blocks,
+        [uuidv4()]: {
+          type: blockType,
+          typeMeta: {
+            match: '/'
+          },
+          data: {},
+          parrents: [blockKey],
+          x: 0,
+          y: 0,
+          height: 120,
+          width: 320,
+
+        }
+      },
+      startBlockX,
+      startBlockY,
+    )
+
+    const _lines = buildLines(
+      _blocks
+    )
+
+    setLines(_lines)
+    setBlocks(_blocks)
+  }
+
   const blocksArray = Object.entries(blocks)
   return (
     <Fragment>
       <GlobalStyle />
+        <BlockList />
         <BoardContainer
           ref={boardRef}
           id={'board'}
@@ -180,6 +222,7 @@ const App: React.FC = () => {
                   blockKey={key}
                   block={block}
                   handleDrag={handleDrag}
+                  onAddNewBlock={handleCreateAndAddNewBlock}
                 >
                 </NewVisitorBlock>
               )
@@ -194,8 +237,8 @@ const App: React.FC = () => {
                   left={block.x}
                   blockKey={key}
                   block={block}
+                  onAddNewBlock={handleCreateAndAddNewBlock}
                 >
-
                 </MatchBlock>
               )
             }
@@ -209,6 +252,7 @@ const App: React.FC = () => {
                 left={block.x}
                 blockKey={key}
                 block={block}
+                onAddNewBlock={handleCreateAndAddNewBlock}
               >
                 {key}
               </StandardBlock>

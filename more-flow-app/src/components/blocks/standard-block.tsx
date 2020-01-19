@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Block } from '../../lib/block-types'
+import { DropCaptureBlock } from './drop-capture-block'
 
 type StandardBlockContainer = {
   widthProp: number
@@ -74,9 +75,55 @@ export const Text = styled.div`
   color: #808292;
 `
 
+const CaptureIndicatorContainer = styled.div`
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  left: calc(50% - 12px);
+  bottom: -12px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  opacity:1;
+  transition:all .3s cubic-bezier(.05,.03,.35,1);
+  transform:scale(1);
+`
+
+const CaptureIndicatorOuterCircle = styled.div`
+  height: 20px;
+  width: 20px;
+  background-color: #217CE8;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0.5;
+`
+
+const CaptureIndicatorInnerCircle = styled.div`
+  height: 12px;
+  width: 12px;
+  background-color: #217CE8;
+  border-radius: 50%;
+  position: absolute;
+`
+
+export const CaptureIndicator = () => {
+  return (
+    <CaptureIndicatorContainer>
+      <CaptureIndicatorOuterCircle />
+      <CaptureIndicatorInnerCircle />
+    </CaptureIndicatorContainer>
+  )
+}
+
+
+
 export type StandardBlockProps = {
   block: Block
   blockKey: string
+  onAddNewBlock: (blockKey: string, newBlockType: string) => void
 } & StandardBlockContainer
 
 export const StandardBlock: React.FC<StandardBlockProps> = ({
@@ -87,24 +134,38 @@ export const StandardBlock: React.FC<StandardBlockProps> = ({
   block,
   blockKey,
   children,
+  onAddNewBlock,
 }) => {
 
   return (
-    <StandardBlockContainer
+    <DropCaptureBlock
       widthProp={widthProp}
       heightProp={heightProp}
       top={top}
       left={left}
+      onDrop={(blockType) => onAddNewBlock(blockKey, blockType)}
     >
-      <TitleContainer>
-        <IconContainer>
+      {(canCapture: boolean) => (
+        <StandardBlockContainer
+          widthProp={widthProp}
+          heightProp={heightProp}
+          top={20}
+          left={20}
+        >
+          <TitleContainer>
+            <IconContainer>
 
-        </IconContainer>
-        <Title>
-          {children}
-        </Title>
+            </IconContainer>
+            <Title>
+              {children}
+            </Title>
 
-      </TitleContainer>
-    </StandardBlockContainer>
+          </TitleContainer>
+          {canCapture && (
+            <CaptureIndicator />
+          )}
+        </StandardBlockContainer>
+      )}
+    </DropCaptureBlock>
   )
 }
