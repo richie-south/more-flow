@@ -21,6 +21,28 @@ const GlobalStyle = createGlobalStyle`
     background-repeat: repeat;
     background-size: 30px 30px;
   }
+
+  .active-path-to {
+    stroke-dasharray: 50;
+    animation: dashTo 5s linear infinite;
+  }
+
+  .active-path-from {
+    stroke-dasharray: 50;
+    animation: dashFrom 5s linear infinite;
+  }
+
+  @keyframes dashTo {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
+
+  @keyframes dashFrom {
+    from {
+      stroke-dashoffset: 1000;
+    }
+  }
 `
 
 type BoardContainerProps = {
@@ -44,6 +66,14 @@ const App: React.FC = () => {
 
   const [lines, setLines] = useState<Array<Line>>([])
   const [blocks, setBlocks] = useState<Blocks>(startBlocks)
+  const [blockPaths, setBlockPaths] = useState<Array<string>>([
+    'new-visitor',
+    'support-match',
+    '5',
+    '6',
+    '7',
+    '9'
+  ])
 
 
   useEffect(() => {
@@ -66,7 +96,7 @@ const App: React.FC = () => {
 
     console.time('lines')
     const _lines = buildLines(
-      _blocks,
+      _blocks
     )
     console.timeEnd('lines')
 
@@ -118,6 +148,7 @@ const App: React.FC = () => {
           rectWidth={rect.width}
         >
           {lines.map((line) => {
+            const active = blockPaths.includes(line.id)
             return (
               <PathContainer
                 rect={rect}
@@ -125,9 +156,15 @@ const App: React.FC = () => {
                 id={line.id}
                 x={line.x}
                 y={line.y}
+                active={active}
               >
-                <Path d={line.linePosition} />
-                <EndArrow d={line.arrowPosition} />
+                <Path
+                  active={active}
+                  direction={line.direction}
+                  d={line.linePosition} />
+                <EndArrow
+                  active={active}
+                  d={line.arrowPosition} />
               </PathContainer>
             )
           })}
