@@ -208,8 +208,8 @@ function repositionBlocks(
 
 export function buildBlocks(
   blocks: Blocks,
-  height: number,
-  width: number,
+  startBlockX: number,
+  startBlockY: number,
   xOffset = 30,
   yOffset = 80
 ): Blocks {
@@ -218,8 +218,6 @@ export function buildBlocks(
     ([_, block]) => block.parrents.length === 0
   )
 
-  const startBlockX = width / 2
-  const startBlockY = height / 6
   let previousRootBlocks: Blocks = {}
   const _blocks = startBlocks.reduce(
     (_blocks, [startBlockKey, startBlock], index) => {
