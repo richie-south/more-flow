@@ -166,7 +166,7 @@ function buildLine(
         xOffset
       ),
       {
-        id: `right-${childBlockKey}`, // might be to slow
+        id: `right-${childBlockKey}`,
         linePosition,
         arrowPosition,
         x: Math.ceil(parrentBlock.x + parrentBlock.width / 2 + -4),
