@@ -20,10 +20,6 @@ export const StandardBlockContainer = styled.div<StandardBlockContainer>`
   height: ${(props) => props.heightProp}px;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
-  /* border: 1px solid black; */
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
   background-color: white;
   position: absolute;
   border-radius: 5px;
@@ -77,18 +73,23 @@ export const Text = styled.div`
   color: #808292;
 `
 
-const CaptureIndicatorContainer = styled.div`
+type CaptureIndicatorContainerProps = {
+  isTop: boolean
+}
+
+const CaptureIndicatorContainer = styled.div<CaptureIndicatorContainerProps>`
   height: 24px;
   width: 24px;
   position: absolute;
   left: calc(50% - 12px);
-  bottom: -12px;
+  ${(props) => props.isTop
+    ? `top: -12px`
+    : `bottom: -12px`};
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2;
-
   opacity:1;
   transition:all .3s cubic-bezier(.05,.03,.35,1);
   transform:scale(1);
@@ -111,9 +112,15 @@ const CaptureIndicatorInnerCircle = styled.div`
   position: absolute;
 `
 
-export const CaptureIndicator = () => {
+type CaptureIndicatorProps = {
+  isTop: boolean
+}
+
+export const CaptureIndicator: React.FC<CaptureIndicatorProps> = ({
+  isTop
+}) => {
   return (
-    <CaptureIndicatorContainer>
+    <CaptureIndicatorContainer isTop={isTop}>
       <CaptureIndicatorOuterCircle />
       <CaptureIndicatorInnerCircle />
     </CaptureIndicatorContainer>
@@ -124,7 +131,7 @@ export type StandardBlockProps = {
   block: Block
   blockKey: string
   yOffset: number
-  onAddNewBlock: (blockKey: string, newBlockType: string) => void
+  onAddNewBlock: (blockKey: string, newBlockType: string, position: 'top' | 'bottom') => void
 } & StandardBlockContainer
 
 export const StandardBlock: React.FC<StandardBlockProps> = ({
@@ -146,9 +153,9 @@ export const StandardBlock: React.FC<StandardBlockProps> = ({
       top={top}
       left={left}
       yOffset={yOffset}
-      onDrop={(blockType) => onAddNewBlock(blockKey, blockType)}
+      onDrop={(blockType, position) => onAddNewBlock(blockKey, blockType, position)}
     >
-      {(canCapture: boolean) => (
+      {(canCaptureTop: boolean, canCaptureBottom: boolean) => (
         <StandardBlockContainer
           widthProp={widthProp}
           heightProp={heightProp}
@@ -164,8 +171,8 @@ export const StandardBlock: React.FC<StandardBlockProps> = ({
             </Title>
 
           </TitleContainer>
-          {canCapture && (
-            <CaptureIndicator />
+          {(canCaptureTop || canCaptureBottom) && (
+            <CaptureIndicator isTop={canCaptureTop} />
           )}
         </StandardBlockContainer>
       )}

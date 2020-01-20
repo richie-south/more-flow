@@ -38,9 +38,9 @@ export const MatchBlock: React.FC<StandardBlockProps> = ({
       top={top}
       left={left}
       yOffset={yOffset}
-      onDrop={(blockType) => onAddNewBlock(blockKey, blockType)}
+      onDrop={(blockType, position) => onAddNewBlock(blockKey, blockType, position)}
     >
-      {(canCapture: boolean) => (
+      {(canCaptureTop: boolean, canCaptureBottom: boolean) => (
         <StandardBlockContainer
           widthProp={widthProp}
           heightProp={heightProp}
@@ -64,8 +64,8 @@ export const MatchBlock: React.FC<StandardBlockProps> = ({
               matches
             </Text>
           </Content>
-          {canCapture && (
-            <CaptureIndicator />
+          {(canCaptureTop || canCaptureBottom) && (
+            <CaptureIndicator isTop={canCaptureTop} />
           )}
         </StandardBlockContainer>
       )}

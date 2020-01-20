@@ -38,9 +38,9 @@ export const NewVisitorBlock: React.FC<StandardBlockProps & NewVisitorBlockProps
       top={top}
       left={left}
       yOffset={yOffset}
-      onDrop={(blockType) => onAddNewBlock(blockKey, blockType)}
+      onDrop={(blockType, position) => onAddNewBlock(blockKey, blockType, position)}
     >
-      {(canCapture: boolean) => (
+      {(canCaptureTop: boolean, canCaptureBottom: boolean) => (
         <StandardBlockContainer
           widthProp={widthProp}
           heightProp={heightProp}
@@ -80,8 +80,8 @@ export const NewVisitorBlock: React.FC<StandardBlockProps & NewVisitorBlockProps
               New visitor
             </Title>
           </TitleCenterContainer>
-          {canCapture && (
-            <CaptureIndicator />
+          {(canCaptureTop || canCaptureBottom) && (
+            <CaptureIndicator isTop={canCaptureTop} />
           )}
         </StandardBlockContainer>
       )}
