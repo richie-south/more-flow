@@ -14,6 +14,7 @@ import { debounce } from 'lodash'
 import { startBlocks } from './start-blocks'
 import { BlockList } from './components/block-list/block-list'
 import uuidv4 from 'uuid/v4'
+import {availableBlocks} from './available-blocks'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -146,8 +147,80 @@ const App: React.FC = () => {
     setBlocks(_blocks)
   }, 0)).current
 
-  const handleCreateAndAddNewBlock = (blockKey: string, blockType: string) => {
-    console.log(blockKey, blockType)
+
+  const addBlockAbove = (blockKey: string, blockType: string, startBlockX: number, startBlockY: number) => {
+    const block = blocks[blockKey]
+    const newBlockKey = uuidv4()
+    const newBlock = {
+      ...availableBlocks[blockType],
+      typeMeta: {
+        match: '/'
+      },
+      data: {},
+      parrents: block.parrents,
+      x: 0,
+      y: 0,
+    }
+
+    // if multible parrents?
+    block.parrents = [newBlockKey]
+
+    const _newBlocks = {
+      ...blocks,
+      [blockKey]: block,
+      [newBlockKey]: newBlock
+    }
+
+    const _blocks = buildBlocks(
+      _newBlocks,
+      startBlockX,
+      startBlockY,
+      xOffset,
+      yOffset
+    )
+
+    const _lines = buildLines(
+      _blocks,
+      xOffset,
+      yOffset
+    )
+
+    setLines(_lines)
+    setBlocks(_blocks)
+  }
+
+  const addBlockBelow = (blockKey: string, blockType: string, startBlockX: number, startBlockY: number) => {
+    const _blocks = buildBlocks(
+      {
+        ...blocks,
+        [uuidv4()]: {
+          ...availableBlocks[blockType],
+          typeMeta: {
+            match: '/'
+          },
+          data: {},
+          parrents: [blockKey],
+          x: 0,
+          y: 0,
+        }
+      },
+      startBlockX,
+      startBlockY,
+      xOffset,
+      yOffset
+    )
+
+    const _lines = buildLines(
+      _blocks,
+      xOffset,
+      yOffset
+    )
+
+    setLines(_lines)
+    setBlocks(_blocks)
+  }
+
+  const handleCreateAndAddNewBlock = (blockKey: string, blockType: string, position: 'top' | 'bottom') => {
     if (!boardRef.current) {
       return
     }
@@ -156,33 +229,12 @@ const App: React.FC = () => {
     const startBlockX = width / 2
     const startBlockY = height / 6
 
-    const _blocks = buildBlocks(
-      {
-        ...blocks,
-        [uuidv4()]: {
-          type: blockType,
-          typeMeta: {
-            match: '/'
-          },
-          data: {},
-          parrents: [blockKey],
-          x: 0,
-          y: 0,
-          height: 120,
-          width: 320,
+    if (position === 'top') {
+      addBlockAbove(blockKey, blockType, startBlockX, startBlockY)
+    } else {
+      addBlockBelow(blockKey, blockType, startBlockX, startBlockY)
+    }
 
-        }
-      },
-      startBlockX,
-      startBlockY,
-    )
-
-    const _lines = buildLines(
-      _blocks
-    )
-
-    setLines(_lines)
-    setBlocks(_blocks)
   }
 
   const blocksArray = Object.entries(blocks)
