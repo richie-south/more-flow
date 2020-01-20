@@ -113,4 +113,28 @@ export const startBlocks: Blocks = {
     height: 120,
     width: 320,
   },
+
+  'Active visitor': {
+    type: 'standard-block',
+    typeMeta: {},
+    data: {},
+    parrents: [],
+    x: 0,
+    y: 0,
+    height: 120,
+    width: 320,
+  },
+
+  '10': {
+    type: 'standard-block',
+    typeMeta: {},
+    data: {},
+    parrents: [
+      'Active visitor'
+    ],
+    x: 0,
+    y: 0,
+    height: 120,
+    width: 320,
+  },
 }
