@@ -56,13 +56,13 @@ export const DropCaptureBlock: React.FC<DropCaptureBlockProps> = ({
         event.persist()
 
         // top half of block
-        if (event.clientY < top + ((heightProp / 2) - 40) && !canCaptureTop) {
+        if (event.clientY < top + ((heightProp / 2)) && !canCaptureTop) {
           setCanCaptureBottom(false)
           setCanCaptureTop(true)
         }
 
         // bottom half of block
-        if (event.clientY > top + ((heightProp / 2) - 40) && !canCaptureBottom) {
+        if (event.clientY > top + ((heightProp / 2) - 20) && !canCaptureBottom) {
           setCanCaptureTop(false)
           setCanCaptureBottom(true)
         }
