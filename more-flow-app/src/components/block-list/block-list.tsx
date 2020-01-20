@@ -4,6 +4,7 @@ import { Text} from '../blocks/standard-block'
 import actionGreyIcon from '../../assets/action-grey.svg'
 import eyeGreyIcon from '../../assets/eye-grey.svg'
 import databaseGreyIcon from '../../assets/database-grey.svg'
+import {availableBlocks} from '../../available-blocks'
 
 const BlockListContainer = styled.div`
   width: 300px;
@@ -118,17 +119,22 @@ const BlockItem: React.FC<BlockItemProps> = ({ children, blockType }) => {
 }
 
 export function BlockList () {
+  const availableBlocksArray = Object.values(availableBlocks)
 
   return (
     <BlockListContainer>
       <h2>Blocks</h2>
-      <BlockItem blockType='match-block'>
-        Match
-      </BlockItem>
 
-      <BlockItem blockType='standard-block'>
-        Standard
-      </BlockItem>
+      {availableBlocksArray.map((availableBlock) => {
+        return (
+          <BlockItem
+            key={availableBlock.type}
+            blockType={availableBlock.type}
+          >
+            {availableBlock.name}
+          </BlockItem>
+        )
+      })}
     </BlockListContainer>
   )
 }
