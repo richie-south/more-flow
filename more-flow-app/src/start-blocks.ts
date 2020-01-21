@@ -1,4 +1,4 @@
-import { Blocks } from "./lib/block-types";
+import { Blocks } from "more-flow-engine";
 
 export const startBlocks: Blocks = {
   'new-visitor': {
