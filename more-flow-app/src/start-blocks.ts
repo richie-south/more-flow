@@ -15,7 +15,7 @@ export const startBlocks: Blocks = {
   'is-device-mobile': {
     type: 'match-block',
     typeMeta: {
-      match: 'mobile'
+      match: '/produkter'
     },
     data: {},
     parrents: ['new-visitor'],
@@ -25,7 +25,7 @@ export const startBlocks: Blocks = {
     width: 320,
   },
 
-  'change-style': {
+  'faq': {
     type: 'standard-block',
     typeMeta: {},
     data: {},
@@ -39,7 +39,34 @@ export const startBlocks: Blocks = {
   'support-match': {
     type: 'match-block',
     typeMeta: {
-      match: '/support'
+      match: '/produkter/kassa'
+    },
+    data: {},
+    parrents: ['new-visitor',],
+    x: 0,
+    y: 0,
+    height: 420,
+    width: 320,
+  },
+
+
+ /*  'match-all': {
+    type: 'match-block',
+    typeMeta: {
+      match: '/'
+    },
+    data: {},
+    parrents: ['new-visitor',],
+    x: 0,
+    y: 0,
+    height: 120,
+    width: 320,
+  }, */
+
+  'agent-online': {
+    type: 'match-block',
+    typeMeta: {
+      match: 'agent online'
     },
     data: {},
     parrents: ['new-visitor'],
@@ -49,17 +76,52 @@ export const startBlocks: Blocks = {
     width: 320,
   },
 
-  '4': {
-    type: 'standard-block',
-    typeMeta: {},
+  'agent-offline': {
+    type: 'match-block',
+    typeMeta: {
+      match: 'agent offline'
+    },
     data: {},
-    parrents: ['support-match'],
+    parrents: ['new-visitor'],
     x: 0,
     y: 0,
     height: 120,
     width: 320,
   },
-  '5': {
+
+  'chat': {
+    type: 'standard-block',
+    typeMeta: {},
+    data: {},
+    parrents: ['agent-online'],
+    x: 0,
+    y: 0,
+    height: 120,
+    width: 320,
+  },
+
+  'faq_': {
+    type: 'standard-block',
+    typeMeta: {},
+    data: {},
+    parrents: ['agent-offline'],
+    x: 0,
+    y: 0,
+    height: 120,
+    width: 320,
+  },
+
+  'faq__': {
+    type: 'standard-block',
+    typeMeta: {},
+    data: {},
+    parrents: ['chat'],
+    x: 0,
+    y: 0,
+    height: 120,
+    width: 320,
+  },
+/*   '5': {
     type: 'standard-block',
     typeMeta: {},
     data: {},
@@ -136,5 +198,5 @@ export const startBlocks: Blocks = {
     y: 0,
     height: 120,
     width: 320,
-  },
+  }, */
 }
