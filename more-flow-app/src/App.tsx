@@ -72,7 +72,6 @@ const App: React.FC = () => {
   const [lines, setLines] = useState<Array<Line>>([])
   const [blocks, setBlocks] = useState<Blocks>(startBlocks)
   const [blockPaths, setBlockPaths] = useState<Array<string>>([
-    'new-visitor',
     'support-match',
     '5',
     '6',
@@ -150,9 +149,10 @@ const App: React.FC = () => {
 
   const addBlockAbove = (blockKey: string, blockType: string, startBlockX: number, startBlockY: number) => {
     const block = blocks[blockKey]
-    const newBlockKey = uuidv4()
+    const blockTemplete = availableBlocks[blockType]
+    const newBlockKey = `${blockTemplete.name}-${uuidv4()}`
     const newBlock = {
-      ...availableBlocks[blockType],
+      ...blockTemplete,
       typeMeta: {
         match: '/'
       },
@@ -189,12 +189,13 @@ const App: React.FC = () => {
     setBlocks(_blocks)
   }
 
-  const addBlockBelow = (blockKey: string, blockType: string, startBlockX: number, startBlockY: number) => {
+  const addBlockBelow = (blockKey: string, newBlockType: string, startBlockX: number, startBlockY: number) => {
+    const templateBlock = availableBlocks[newBlockType]
     const _blocks = buildBlocks(
       {
         ...blocks,
-        [uuidv4()]: {
-          ...availableBlocks[blockType],
+        [`${templateBlock.name}-${uuidv4()}`]: {
+          ...templateBlock,
           typeMeta: {
             match: '/'
           },

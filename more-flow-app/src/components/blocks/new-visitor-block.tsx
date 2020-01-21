@@ -38,7 +38,7 @@ export const NewVisitorBlock: React.FC<StandardBlockProps & NewVisitorBlockProps
       top={top}
       left={left}
       yOffset={yOffset}
-      onDrop={(blockType, position) => onAddNewBlock(blockKey, blockType, position)}
+      onDrop={(newBlockKey, position) => onAddNewBlock(blockKey, newBlockKey, position)}
     >
       {(canCaptureTop: boolean, canCaptureBottom: boolean) => (
         <StandardBlockContainer

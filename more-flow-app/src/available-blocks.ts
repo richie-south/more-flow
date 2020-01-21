@@ -39,4 +39,20 @@ export const availableBlocks: AvailableBlocks = {
     height: 120,
     width: 320,
   },
+
+  '_chat': {
+    name: 'Chat',
+    type: 'standard-block',
+    typeMeta: {},
+    height: 120,
+    width: 320,
+  },
+
+  '_faq': {
+    name: 'Faq',
+    type: 'standard-block',
+    typeMeta: {},
+    height: 120,
+    width: 320,
+  },
 }

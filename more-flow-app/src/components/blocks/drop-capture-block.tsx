@@ -20,7 +20,7 @@ type DropCaptureBlockProps = {
   heightProp: number
   top: number
   left: number
-  onDrop: (blockType: string, position: 'top' | 'bottom') => void
+  onDrop: (blockKey: string, position: 'top' | 'bottom') => void
   yOffset: number
 }
 
@@ -69,17 +69,17 @@ export const DropCaptureBlock: React.FC<DropCaptureBlockProps> = ({
       }}
 
       onDrop={(event) => {
-        const blockType = event.dataTransfer.getData("block-type")
+        const blockKey = event.dataTransfer.getData("block-key")
 
         count = -1
         setCanCaptureTop(false)
         setCanCaptureBottom(false)
         const position = canCaptureTop ? 'top' : 'bottom'
 
-        if (!blockType) {
+        if (!blockKey) {
           return
         }
-        onDrop(blockType, position)
+        onDrop(blockKey, position)
       }}
 
       onDragLeave={(e) => {

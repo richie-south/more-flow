@@ -75,9 +75,10 @@ const IconContainer = styled.div`
 
 type BlockItemProps = {
   blockType: string
+  blockKey: string
 }
 
-const BlockItem: React.FC<BlockItemProps> = ({ children, blockType }) => {
+const BlockItem: React.FC<BlockItemProps> = ({ children, blockType, blockKey }) => {
 
   const getBlockIcon = (blockType: string) => {
     switch (blockType) {
@@ -98,7 +99,7 @@ const BlockItem: React.FC<BlockItemProps> = ({ children, blockType }) => {
       draggable
       onDragStart={(event) => {
         event.persist()
-        event.dataTransfer.setData('block-type', blockType)
+        event.dataTransfer.setData('block-key', blockKey)
       }}
     >
       <TitleContainer>
@@ -119,17 +120,18 @@ const BlockItem: React.FC<BlockItemProps> = ({ children, blockType }) => {
 }
 
 export function BlockList () {
-  const availableBlocksArray = Object.values(availableBlocks)
+  const availableBlocksArray = Object.entries(availableBlocks)
 
   return (
     <BlockListContainer>
       <h2>Blocks</h2>
 
-      {availableBlocksArray.map((availableBlock) => {
+      {availableBlocksArray.map(([key, availableBlock]) => {
         return (
           <BlockItem
-            key={availableBlock.type}
+            key={key}
             blockType={availableBlock.type}
+            blockKey={key}
           >
             {availableBlock.name}
           </BlockItem>
