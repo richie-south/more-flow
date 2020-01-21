@@ -241,6 +241,17 @@ const App: React.FC = () => {
     <Fragment>
       <GlobalStyle />
         <BlockList />
+        <button
+          style={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            zIndex: 100
+          }}
+          onClick={() => {
+            console.log(JSON.stringify(blocks, null, 2))
+          }}
+        >print board</button>
         <BoardContainer
           ref={boardRef}
           id={'board'}
