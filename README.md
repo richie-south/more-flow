@@ -1,22 +1,9 @@
+Simple prototype of a flow builder, live att [flow.richardsoderman.se](https://flow.richardsoderman.se)
 
 ## more-flow-app
 web interface
-- npm start
-
-todo mvp:
-  - [ ] drag and dropp
-  - [ ] zoom
-  - [ ] multible parents or reference to other block chain
-  - [ ] more block types
 
 ## more-flow-engine
 calcualtions
-- npm test
-- npm build
 
-todo:
-  - [ ] performance degradation test
-  - [ ] block position tests
-  - [ ] line position tests
-  - [ ] line endpoints tests
-  - [ ] do line calculations at the same time as block calcualtions
+<img src="https://github.com/richie-south/more-flow/blob/master/flow-builder.gif" width="600">
